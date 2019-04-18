@@ -69,6 +69,9 @@
 // Support for USB quirks, like changing the key state report protocol
 #include "Kaleidoscope-USB-Quirks.h"
 
+// SpaceCadet (https://github.com/keyboardio/Kaleidoscope-SpaceCadet)
+#include "Kaleidoscope-SpaceCadet.h"
+
 /** This 'enum' is a list of all the macros used by the Model 01's firmware
   * The names aren't particularly important. What is important is that each
   * is unique.
@@ -489,7 +492,10 @@ KALEIDOSCOPE_INIT_PLUGINS(
   // comfortable - or able - to do automatically, but can be useful
   // nevertheless. Such as toggling the key report protocol between Boot (used
   // by BIOSes) and Report (NKRO).
-  USBQuirks
+  USBQuirks,
+
+  // https://github.com/keyboardio/Kaleidoscope-SpaceCadet
+  SpaceCadet
 );
 
 /** The 'setup' function is one of the two standard Arduino sketch functions.
@@ -527,6 +533,21 @@ void setup() {
   // one wants to use these layers, just set the default layer to one in EEPROM,
   // by using the `settings.defaultLayer` Focus command.
   EEPROMKeymap.setup(5, EEPROMKeymap.Mode::EXTEND);
+
+  // Customize SpaceCadet.
+  //Set the keymap with a 250ms timeout per-key
+  //Setting is {KeyThatWasPressed, AlternativeKeyToSend, TimeoutInMS}
+  static kaleidoscope::SpaceCadet::KeyBinding spacecadetmap[] = {
+    {Key_LeftShift, Key_LeftParen, 250}
+    , {Key_RightShift, Key_RightParen, 250}
+    , {Key_LeftGui, Key_LeftCurlyBracket, 250}
+    , {Key_RightAlt, Key_RightCurlyBracket, 250}
+    , {Key_LeftAlt, Key_RightCurlyBracket, 250}
+    , {Key_LeftControl, Key_LeftBracket, 250}
+    , {Key_RightControl, Key_RightBracket, 250}
+    , SPACECADET_MAP_END
+  };
+  SpaceCadet.map = spacecadetmap;
 }
 
 /** loop is the second of the standard Arduino sketch functions.
